@@ -1,6 +1,6 @@
-package com.redis.command.reactive;
+package com.data.redis.reactive;
 
-import com.redis.command.dto.UserDto;
+import com.data.redis.dto.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,29 +17,29 @@ public class ReactiveRedisTemplateTest {
     @Test
     @DisplayName("ReactiveRedisTemplate으로 redis 저장 하기")
     void reactiveRedisTemplateSetTest() {
-        String redisKey = "TEST:userDto";
+        String redisKey = "TEST:user";
 
-        UserDto userDto = UserDto.builder()
-                .userId("redis-command")
-                .userName("홍길동")
+        User user = User.builder()
+                .id("redis-command")
+                .name("홍길동")
                 .build();
 
-        Mono<Boolean> setFlag = reactiveRedisTemplate.opsForValue().set(redisKey, userDto);
+        Mono<Boolean> setFlag = reactiveRedisTemplate.opsForValue().set(redisKey, user);
         setFlag.subscribe();
     }
 //    @Test
     @DisplayName("ReactiveRedisTemplate으로 redis 조회하기")
     void reactiveRedisTemplateGetTest() {
-        String redisKey = "TEST:userDto";
+        String redisKey = "TEST:user";
 
         Mono<Object> userMono = reactiveRedisTemplate.opsForValue().get(redisKey);
 
         Object userObj = userMono.block();
 
-//        Mono<UserDto> user = userObject.cast(UserDto.class);
+//        Mono<User> user = userObject.cast(User.class);
 
-//                Mono<UserDto> user = reactiveRedisTemplate.opsForValue().get(redisKey)
-//                 .cast(UserDto.class);
+//                Mono<User> user = reactiveRedisTemplate.opsForValue().get(redisKey)
+//                 .cast(User.class);
 
 //         System.out.println("user = " + user.block());
          System.out.println("user = " + userObj);

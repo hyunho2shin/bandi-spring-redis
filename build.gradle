@@ -18,12 +18,44 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+//  compileOnly: 컴파일 시에만 의존성을 사용합니다.
+//  annotationProcessor: 컴파일 시점에 코드를 생성하도록 합니다.
+
+    // Spring Data JPA: 데이터베이스와 객체를 매핑하고 쉽게 다루기 위해 필요
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // SQLite JDBC Driver: Spring Boot가 SQLite와 통신하기 위해 필요
+//    implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
+//    implementation 'org.xerial:sqlite-jdbc'
+
+    // Spring Web: RESTful API 등을 만들기 위해 필요
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'io.lettuce:lettuce-core'
+
+    // Jackson CSV DataFormat
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Lombok: @Getter, @Setter 등 보일러플레이트 코드를 줄여줌
+    compileOnly 'org.projectlombok:lombok'
+
+    annotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    // 아래 경고가 뜨는경우
+    // OpenJDK 64-bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+    // Java 가상 머신(JVM)의 클래스 데이터 공유(Class Data Sharing, CDS) 관련 경고입니다
+    // 이 경고는 다음 상황에서 특히 자주 발생합니다:
+    //  OpenJDK 사용 시
+    //  JUnit 테스트 실행 시 커스텀 클래스패스가 삽입된 경우
+    //  JetBrains Runtime (IntelliJ 내부 JVM) 또는 Gradle/Build tool이 -Xbootclasspath 사용
+    jvmArgs '-Xshare:off' // JVM 아규먼트 설정
 }

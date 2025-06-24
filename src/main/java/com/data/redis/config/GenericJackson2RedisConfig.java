@@ -1,4 +1,4 @@
-package com.redis.command.config;
+package com.data.redis.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class GenericJackson2RedisConfig {
         // RedisRepository 사용시에는 Redis의 트랜잭션 기능과는 호환되지 않습니다.
         // 따라서, 사용할 때는 트랜잭션 기능이 비활성화된 RedisTemplate을 사용해야 합니다.
         // https://docs.spring.io/spring-data/redis/reference/repositories.html
-        // redisTemplate.setEnableTransactionSupport(false); // 트랙재션 활성화 (기본값은 false)
+        redisTemplate.setEnableTransactionSupport(false); // 트랙재션 비활성화 (기본값은 false)
 
         redisTemplate.setConnectionFactory( factory );
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -29,5 +29,4 @@ public class GenericJackson2RedisConfig {
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
-
 }

@@ -1,7 +1,7 @@
-package com.redis.command.connfactory;
+package com.data.redis.connfactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redis.command.dto.UserDto;
+import com.data.redis.dto.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,11 @@ public class RedisConnectionFactoryTest {
     @Test
     @DisplayName("RedisConnection으로 dto data 조회 하기")
     void redisConnectionDtoGetTest() throws IOException {
-        String redisKey = "userDto:jackson:hong";
+        String redisKey = "user:jackson:hong";
 
-        UserDto userDto = getRedisDto(redisKey, UserDto.class);
+        User user = getRedisDto(redisKey, User.class);
 
-        System.out.println(userDto);
+        System.out.println(user);
     }
 
     private <T> T getRedisDto(String redisKey, Class<T> clazz) throws IOException {

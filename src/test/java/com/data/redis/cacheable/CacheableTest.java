@@ -1,45 +1,51 @@
-package com.data.redis.connfactory;
+package com.data.redis.cacheable;
 
+import com.data.redis.dto.Book;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisConnectionUtils;
 
 @SpringBootTest
-public class RedisConnectionTest {
+public class CacheableTest {
 
     @Autowired
-    RedisConnectionFactory redisConnectionFactory;
+    BookCacheService bookCacheService;
+
+//    @Test
+    @DisplayName("CacheManger를 이용한 Cache 조회하기")
+    void BookCacheableTest() {
+        String id = "ISBN20392910";
+        Book book = bookCacheService.getBook(id);
+        System.out.println("book = " + book);
+
+        id = "ISBN20392911";
+        book = bookCacheService.getBook(id);
+        System.out.println("book = " + book);
+    }
+
+//    @Test
+    @DisplayName("CacheManger를 이용하여 Cache 삭제하기")
+    void BookCacheDeleteTest() {
+        String id = "ISBN20392910";
+
+        bookCacheService.deleteBook(id);
+        System.out.println("삭제 id = " + id);
+    }
+
+//    @Test
+    @DisplayName("CacheManger를 이용하여 book Cache 전체 삭제하기")
+    void BookCacheAllDeleteTest() {
+        bookCacheService.deleteAllBook();
+    }
 
     @Test
-    @DisplayName("RedisConnection으로 redis 조회하기")
-    void redisConnectionTest() {
-        RedisConnection connection = RedisConnectionUtils.getConnection(redisConnectionFactory);
+    @DisplayName("CacheManger를 이용하여 book Cache 갱신하기")
+    void BookCacheUpdateTest() {
+        String id = "ISBN20392911";
+        Book book = bookCacheService.getBook(id);
 
-        String redisKey = "userToken:2139583";
-        String value = "465afe70-ea78-4766-ae25-4aa6dbe0a70e";
-        connection.stringCommands().set(redisKey.getBytes(), value.getBytes());
-
-        byte[] byteData = connection.stringCommands().get(redisKey.getBytes());
-        String data = new String(byteData);
-
-        System.out.println(data);
-
-        // redis 연결이 명시적으로 즉시 종료
-        // pool에서 관리중인 연결이 강제로 닫혀 재사용 불가.
-        // RedisConnectionUtils에 의해 관리되는 ThreadLocal 연결이 깨짐
-//        connection.close();
-
-        // spring에서 제공하는 유틸리티를 이용하여 반환.
-        // Redis 연결을 닫지 않고, 안전하게 pool로 반환하여 재사용 또는 트랜잭션 공유가 가능하게 함
-        // 특정 작업에서 임시로 가져왔다가 (getConnection()), 작업이 끝나면 다시 컨텍스트에 반환해야 (releaseConnection())
-        // 다음 작업에서도 사용할 수 있습니다.
-        // Spring은 ThreadLocal을 통해 Redis 연결을 스레드 단위로 저장하고 관리합니다.
-        // releaseConnection()을 쓰면 이 컨텍스트가 유지되며, 필요 시 연결을 재사용할 수 있습니다.
-        RedisConnectionUtils.releaseConnection(connection, redisConnectionFactory);
-
+        book.setBookName("안나 카레니나"); // 내용 변경.
+        bookCacheService.updateBook(book);
     }
 }

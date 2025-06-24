@@ -1,4 +1,4 @@
-package com.redis.command.redistemplate;
+package com.data.redis.redistemplate;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class StringRedisTemplateTest {
 
     @Autowired
-    StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
 //    @Test
     @DisplayName("StringRedisTemplate으로 redis 저장하기")

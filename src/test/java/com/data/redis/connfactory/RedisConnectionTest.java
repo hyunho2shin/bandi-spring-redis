@@ -1,4 +1,4 @@
-package com.redis.command.connfactory;
+package com.data.redis.connfactory;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ public class RedisConnectionTest {
 
         String redisKey = "userToken:2139583";
         String value = "465afe70-ea78-4766-ae25-4aa6dbe0a70e";
-        connection.set(redisKey.getBytes(), value.getBytes());
+        connection.stringCommands().set(redisKey.getBytes(), value.getBytes());
 
-        byte[] byteData = connection.get(redisKey.getBytes());
+        byte[] byteData = connection.stringCommands().get(redisKey.getBytes());
         String data = new String(byteData);
 
         System.out.println(data);

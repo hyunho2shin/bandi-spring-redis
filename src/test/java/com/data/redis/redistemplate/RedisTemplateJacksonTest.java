@@ -1,6 +1,6 @@
-package com.redis.command.redistemplate;
+package com.data.redis.redistemplate;
 
-import com.redis.command.dto.UserDto;
+import com.data.redis.dto.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,28 +13,28 @@ public class RedisTemplateJacksonTest {
 
     @Qualifier("jackson")
     @Autowired
-    RedisTemplate<String, UserDto> redisTemplate;
+    private RedisTemplate<String, User> redisTemplate;
 
 //    @Test
     @DisplayName("RedisTemplate Jackson으로 dto data 저장 하기")
     void redisTemplateDtoSetTest() {
-        String redisKey = "userDto:jackson:hong";
+        String redisKey = "user:jackson:hong";
 
-        UserDto userDto = UserDto.builder()
-                .userId("redis-command")
-                .userName("홍길동")
+        User user = User.builder()
+                .id("redis-command")
+                .name("홍길동")
                 .build();
 
-        redisTemplate.opsForValue().set(redisKey, userDto);
+        redisTemplate.opsForValue().set(redisKey, user);
     }
 
     @Test
     @DisplayName("RedisTemplate Jackson으로 dto data 조회 하기")
     void redisTemplateDtoGetTest() {
-        String redisKey = "userDto:jackson:hong";
+        String redisKey = "user:jackson:hong";
 
-        UserDto userDto = redisTemplate.opsForValue().get(redisKey);
+        User user = redisTemplate.opsForValue().get(redisKey);
 
-        System.out.println(userDto);
+        System.out.println(user);
     }
 }

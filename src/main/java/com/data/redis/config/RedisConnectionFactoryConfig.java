@@ -1,10 +1,10 @@
-package com.redis.command.config;
+package com.data.redis.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -15,14 +15,14 @@ import java.time.Duration;
 public class RedisConnectionFactoryConfig {
     private final RedisProperties redisProperties;
 
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
+//    @Value("${spring.data.redis.host}")
+//    private String redisHost;
 
-    @Value("${spring.data.redis.port}")
-    private int redisPort;
+//    @Value("${spring.data.redis.port}")
+//    private int redisPort;
 
-    @Value("${spring.data.redis.database}")
-    private int redisDatabase;
+//    @Value("${spring.data.redis.database}")
+//    private int redisDatabase;
 
     public RedisConnectionFactoryConfig(RedisProperties redisProperties) {
         this.redisProperties = redisProperties;

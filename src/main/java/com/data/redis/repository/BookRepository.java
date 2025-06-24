@@ -1,24 +1,56 @@
 package com.data.redis.repository;
 
-import com.data.redis.dto.User;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.ListCrudRepository;
+import com.data.redis.dto.Book;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import jakarta.annotation.PostConstruct;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
-public interface UserRepository extends CrudRepository<User, String> {
-//public interface UserRepository extends ListCrudRepository<User, String> {
-    List<User> findByDept(String dept);
-    List<User> findByNameAndDept(String name, String dept); // sInter (교집합)
-    List<User> findByNameOrDept(String name, String dept); // sUnion (합집합)
+@Repository
+public class BookRepository {
 
-    // Sorting(정렬)
-    // 1. Static sorting derived from method name. -- 메서드이름으로 명시적 정렬
-    List<User> findByDeptOrderByNameDesc(String dept);
-    List<User> findByDeptOrderByNameAsc(String dept);
+    // CSV 데이터를 로드하여 담아둘 리스트
+    private List<Book> bookList = Collections.emptyList();
 
-    // 2. Dynamic sorting using a method argument. -- argument 기반 동적 정렬.
-    List<User> findByDept(String dept, Sort sort);
+    /**
+     * @PostConstruct: 의존성 주입이 완료된 후 초기화를 위해 실행되는 메서드.
+     * 애플리케이션 시작 시 한 번만 CSV 파일을 읽어 메모리에 로드합니다.
+     */
+    @PostConstruct
+    public void init() {
+        try {
+            // CsvMapper: CSV 데이터를 객체로 변환해주는 Jackson의 핵심 클래스
+            CsvMapper csvMapper = new CsvMapper();
+            // CsvSchema: CSV 파일의 헤더를 사용하여 객체 필드와 매핑하도록 설정
+            CsvSchema schema = CsvSchema.emptySchema().withHeader();
 
+            // src/main/resources 경로의 파일을 읽어옵니다.
+            ClassPathResource resource = new ClassPathResource("csv/book.csv");
+            InputStream inputStream = resource.getInputStream();
+
+            // CSV 파일을 읽어서 Course 객체의 리스트로 변환
+            MappingIterator<Book> it = csvMapper.readerFor(Book.class)
+                    .with(schema)
+                    .readValues(inputStream);
+
+            this.bookList = it.readAll();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Book findById(String id) {
+        return bookList.stream()
+                .filter(book -> book.getId().equals(id))
+                .findFirst()
+                .orElse(new Book());
+    }
 }

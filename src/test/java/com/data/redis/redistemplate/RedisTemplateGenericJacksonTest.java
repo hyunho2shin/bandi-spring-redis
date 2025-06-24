@@ -1,6 +1,6 @@
-package com.redis.command.redistemplate;
+package com.data.redis.redistemplate;
 
-import com.redis.command.dto.UserDto;
+import com.data.redis.dto.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class RedisTemplateGenericJacksonTest {
 
     @Qualifier("genericJackson")
     @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
 //    @Test
     @DisplayName("RedisTemplate으로 string data set/get 하기")
@@ -33,24 +33,24 @@ public class RedisTemplateGenericJacksonTest {
 //    @Test
     @DisplayName("RedisTemplate GenericJackson으로 dto data 저장 하기")
     void redisTemplateDtoSetTest() {
-        String redisKey = "userDto:genericJackson:hong";
+        String redisKey = "user:genericJackson:hong";
 
-        UserDto userDto = UserDto.builder()
-                .userId("redis-command")
-                .userName("홍길동")
+        User user = User.builder()
+                .id("redis-command")
+                .name("홍길동")
                 .build();
 
-        redisTemplate.opsForValue().set(redisKey, userDto);
+        redisTemplate.opsForValue().set(redisKey, user);
     }
 
     @Test
     @DisplayName("RedisTemplate GenericJackson으로 dto data 조회 하기")
     void redisTemplateDtoGetTest() {
-        String redisKey = "userDto:genericJackson:hong";
+        String redisKey = "user:genericJackson:hong";
 
         Object data = redisTemplate.opsForValue().get(redisKey);
 
-        UserDto castDto = (UserDto) data;
+        User castDto = (User) data;
 
         System.out.println(data);
         System.out.println(castDto);

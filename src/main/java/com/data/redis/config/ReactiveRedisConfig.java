@@ -1,4 +1,4 @@
-package com.redis.command.config;
+package com.data.redis.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;

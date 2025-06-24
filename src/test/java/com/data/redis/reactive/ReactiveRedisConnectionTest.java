@@ -1,7 +1,7 @@
-package com.redis.command.reactive;
+package com.data.redis.reactive;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redis.command.dto.UserDto;
+import com.data.redis.dto.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +25,16 @@ public class ReactiveRedisConnectionTest {
     @Test
     @DisplayName("ReactiveRedisConnection을 이용하여 dto class정보를 redis json data에 추가하지 않고 직접 변환하기")
     void reactiveRedisConnectionGetTest() {
-        String redisKey = "TEST:userDto";
+        String redisKey = "TEST:user";
 
         ReactiveRedisConnection reactiveRedisConnection = connectionFactory.getReactiveConnection();
         ByteBuffer keyBuffer = ByteBuffer.wrap(redisKey.getBytes(StandardCharsets.UTF_8));
 
-        UserDto userDto = reactiveRedisConnection.stringCommands().get(keyBuffer)
+        User user = reactiveRedisConnection.stringCommands().get(keyBuffer)
                 .map(ByteUtils::getBytes)
                 .map(bytes -> {
                     try {
-                        return objectMapper.readValue(bytes, UserDto.class);
+                        return objectMapper.readValue(bytes, User.class);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -44,6 +44,6 @@ public class ReactiveRedisConnectionTest {
 
         reactiveRedisConnection.closeLater();
 
-        System.out.println("userDto = " + userDto);
+        System.out.println("user = " + user);
     }
 }

@@ -1,18 +1,31 @@
 package com.data.redis.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
+import org.springframework.data.redis.core.index.Indexed;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@RedisHash("userDto")
-public class UserDto {
+//@RedisHash(value = "user", timeToLive = 3600L)
+@RedisHash(value = "{user}")
+public class User {
     @Id
-    private String userId;
+    private String id;
 
-    private String userName;
+//    @Indexed
+    private String name;
+
+    @TimeToLive
+    @Builder.Default
+    private Long expiration = 3600l;
+
+    @Indexed
+    private String dept;
 }
